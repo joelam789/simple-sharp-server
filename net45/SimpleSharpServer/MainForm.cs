@@ -29,6 +29,8 @@ namespace SimpleSharpServer
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            this.Text = Program.SVC_NAME;
+
             CommonLog.SetGuiControl(this, mmLog);
 
             RemoteCaller.HttpConnectionLimit = 1000; // by default
