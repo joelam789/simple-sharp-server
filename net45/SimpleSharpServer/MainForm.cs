@@ -44,6 +44,9 @@ namespace SimpleSharpServer
                 if (key == "OutgoingHttpConnectionLimit")
                     RemoteCaller.HttpConnectionLimit = Convert.ToInt32(appSettings[key].ToString());
 
+                if (key == "DefaultRemoteCallTimeout")
+                    RemoteCaller.DefaultTimeout = Convert.ToInt32(appSettings[key].ToString());
+
                 if (key == "AppServerSetting")
                     m_ServerSetting = JsonConvert.DeserializeObject<CommonServerContainerSetting>(appSettings[key]);
             }
@@ -53,9 +56,25 @@ namespace SimpleSharpServer
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            CommonLog.Info("Exiting...");
-            this.Text = this.Text + " - Exiting...";
-            if (m_Server != null) m_Server.Stop();
+            if (m_Server != null && m_Server.IsWorking())
+            {
+                if (!btnStop.Enabled)
+                {
+                    e.Cancel = true;
+                }
+                else
+                {
+                    btnStop.Enabled = false;
+                    CommonLog.Info("Exiting...");
+                    this.Text = this.Text + " - Exiting...";
+                    if (m_Server != null) m_Server.Stop();
+                    e.Cancel = false;
+                }
+            }
+            else
+            {
+                e.Cancel = false;
+            }
         }
 
         private async void btnStart_Click(object sender, EventArgs e)

@@ -48,6 +48,9 @@ namespace SimpleSharpServer
                 if (key == "OutgoingHttpConnectionLimit")
                     RemoteCaller.HttpConnectionLimit = Convert.ToInt32(appSettings[key].ToString());
 
+                if (key == "DefaultRemoteCallTimeout")
+                    RemoteCaller.DefaultTimeout = Convert.ToInt32(appSettings[key].ToString());
+
                 if (key == "AppServerSetting")
                     m_ServerSetting = JsonConvert.DeserializeObject<CommonServerContainerSetting>(appSettings[key]);
             }
